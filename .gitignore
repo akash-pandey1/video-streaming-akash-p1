@@ -11,6 +11,10 @@ next-env.d.ts
 # Backend Uploads and Processing Files
 backend/uploads/
 backend/videos/
+backend/*.mp4
+backend/*.m4s
+backend/*.m3u8
+backend/*.ts
 
 # Environment Variables
 .env
