@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
-import { Play, Clock, AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
+import { Play, Clock, AlertCircle, Loader2, CheckCircle2, Trash2 } from "lucide-react";
 
 export interface Video {
   id: string;
@@ -13,7 +13,7 @@ export interface Video {
   createdAt: string;
 }
 
-export default function VideoCard({ video }: { video: Video }) {
+export default function VideoCard({ video, onDelete }: { video: Video, onDelete?: (id: string) => void }) {
   const formatDuration = (seconds: number) => {
     if (!seconds) return "0:00";
     const h = Math.floor(seconds / 3600);
@@ -98,10 +98,24 @@ export default function VideoCard({ video }: { video: Video }) {
       </div>
 
       {/* Content Info */}
-      <div className="p-4">
-        <h3 className="font-semibold text-lg text-white mb-1 line-clamp-1 group-hover:text-primary transition-colors">
-          {video.title}
-        </h3>
+      <div className="p-4 relative">
+        <div className="flex justify-between items-start mb-1 gap-2">
+          <h3 className="font-semibold text-lg text-white line-clamp-1 group-hover:text-primary transition-colors flex-1">
+            {video.title}
+          </h3>
+          {onDelete && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                onDelete(video.id);
+              }}
+              className="text-gray-500 hover:text-error hover:bg-error/10 p-1.5 rounded-md transition-colors flex-shrink-0 z-10"
+              title="Delete video"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          )}
+        </div>
         {video.description && (
           <p className="text-gray-400 text-sm line-clamp-2 mb-3 h-10">
             {video.description}

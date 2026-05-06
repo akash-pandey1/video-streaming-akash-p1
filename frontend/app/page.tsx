@@ -23,6 +23,18 @@ export default function Home() {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this video?")) return;
+    
+    try {
+      await axios.delete(`http://localhost:5000/api/videos/${id}`);
+      setVideos((prev) => prev.filter((v) => v.id !== id));
+    } catch (err: any) {
+      console.error("Failed to delete video:", err);
+      alert(err.response?.data?.message || "Failed to delete video");
+    }
+  };
+
   useEffect(() => {
     fetchVideos();
     
@@ -73,7 +85,7 @@ export default function Home() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {videos.map((video) => (
-              <VideoCard key={video.id} video={video} />
+              <VideoCard key={video.id} video={video} onDelete={handleDelete} />
             ))}
           </div>
         )}

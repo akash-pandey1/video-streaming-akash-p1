@@ -3,8 +3,9 @@
 import { useEffect, useState, use } from "react";
 import axios from "axios";
 import { formatDistanceToNow } from "date-fns";
-import { Loader2, AlertCircle, ArrowLeft } from "lucide-react";
+import { Loader2, AlertCircle, ArrowLeft, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import VideoPlayer from "@/components/VideoPlayer";
 import { Video } from "@/components/VideoCard";
 
@@ -17,6 +18,8 @@ export default function WatchPage({ params }: WatchPageProps) {
   const [video, setVideo] = useState<Video & { streamUrls?: { hls: string; dash: string } } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchVideo = async () => {
@@ -33,6 +36,20 @@ export default function WatchPage({ params }: WatchPageProps) {
 
     fetchVideo();
   }, [id]);
+
+  const handleDelete = async () => {
+    if (!confirm("Are you sure you want to delete this video?")) return;
+    
+    setIsDeleting(true);
+    try {
+      await axios.delete(`http://localhost:5000/api/videos/${id}`);
+      router.push("/");
+    } catch (err: any) {
+      console.error("Failed to delete video:", err);
+      alert(err.response?.data?.message || "Failed to delete video");
+      setIsDeleting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -92,7 +109,17 @@ export default function WatchPage({ params }: WatchPageProps) {
           />
 
           <div className="glass p-6 rounded-2xl border border-border">
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">{video.title}</h1>
+            <div className="flex justify-between items-start mb-2">
+              <h1 className="text-2xl md:text-3xl font-bold text-white">{video.title}</h1>
+              <button 
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="p-2 text-error hover:bg-error/10 rounded-full transition-colors flex-shrink-0"
+                title="Delete video"
+              >
+                {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Trash2 className="w-5 h-5" />}
+              </button>
+            </div>
             <div className="flex items-center text-sm text-gray-400 mb-6 space-x-4">
               <span>{formatDistanceToNow(new Date(video.createdAt), { addSuffix: true })}</span>
               <span>•</span>

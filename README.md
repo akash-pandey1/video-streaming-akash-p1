@@ -2,7 +2,21 @@
 
 A full-stack, end-to-end adaptive video streaming platform. Users can upload videos which are processed asynchronously into multiple resolutions (240p, 480p, 720p, 1080p) using FFmpeg. The processed video files are served to a Next.js frontend using HLS (HTTP Live Streaming) and DASH formats for seamless, network-adaptive playback.
 
+## Screenshots
+
+<div align="center">
+  <img src="ss/stream-x-1.png" alt="StreamX Home Page" width="800" />
+  <br/><br/>
+  <img src="ss/stream-x-2.png" alt="StreamX Watch Page" width="800" />
+  <br/><br/>
+  <div style="display: flex; justify-content: center; gap: 20px;">
+    <img src="ss/stream-x-1-mobile.png" alt="StreamX Home Mobile" width="300" />
+    <img src="ss/stream-x-2-mobile.png" alt="StreamX Watch Mobile" width="300" />
+  </div>
+</div>
+
 ## Features
+
 
 - **Upload & Transcode**: Drag-and-drop video upload with real-time progress.
 - **Adaptive Bitrate Streaming**: Multi-resolution support using `hls.js` so playback quality adjusts automatically based on the user's internet speed.
